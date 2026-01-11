@@ -50,7 +50,7 @@ api.interceptors.response.use(
         // Non possiamo rimuovere il refresh_token via JS se è HttpOnly,
         // ma il server lo sovrascriverà al prossimo login.
 
-        // window.location.href = "/login";
+        window.location.href = "/login";
         return Promise.reject(refreshError);
       }
     }

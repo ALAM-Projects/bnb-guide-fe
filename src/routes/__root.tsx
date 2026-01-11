@@ -54,10 +54,10 @@ export const Route = createRootRoute({
       { rel: "icon", href: "/favicon.ico" },
     ],
     scripts: [
-      {
-        src: "/customScript.js",
-        type: "text/javascript",
-      },
+      // {
+      //   src: "/customScript.js",
+      //   type: "text/javascript",
+      // },
     ],
   }),
   errorComponent: DefaultCatchBoundary,
@@ -93,7 +93,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     } finally {
       // 2. Pulisci SEMPRE il client
       Cookies.remove("auth_token");
-      // navigate({ to: "/login" });
+      navigate({ to: "/" });
     }
   };
 

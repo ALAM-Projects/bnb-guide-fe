@@ -39,7 +39,7 @@ function SignupPage() {
         document.cookie = `auth_token=${data.access_token}; path=/; max-age=604800; samesite=lax`;
 
         alert("Registrazione completata con successo!");
-        navigate({ to: "/" });
+        navigate({ to: "/dashboard" });
       } else {
         const errorData = await res.json();
         alert(errorData.message || "Errore durante la registrazione");

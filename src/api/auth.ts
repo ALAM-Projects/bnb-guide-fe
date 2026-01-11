@@ -1,8 +1,8 @@
 // src/api/auth.ts
-import { authMiddleware } from "@/middleware/authMIddleware";
 import { createServerFn } from "@tanstack/react-start";
 import api from "./client"; // Il tuo client Axios con intercettori
 import Cookies from "js-cookie";
+import { authMiddleware } from "@/middleware/authMIddleware";
 
 /**
  * 1. SERVER FUNCTION (Per il Router)
@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 export const checkAuthStatus = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
-    return context.auth;
+    return context?.auth;
   });
 
 /**
@@ -20,14 +20,20 @@ export const checkAuthStatus = createServerFn({ method: "GET" })
  */
 export const logoutAction = async () => {
   try {
-    // Chiama NestJS tramite Axios (passando l'AT nell'header)
+    // 1. Chiama NestJS.
+    // Il server riceverà il cookie httpOnly e risponderà con "Set-Cookie: refresh_token=; Max-Age=0"
+    // Questo cancellerà effettivamente il cookie dal browser.
     await api.post("/auth/logout");
   } catch (error) {
     console.error("Errore logout server", error);
   } finally {
-    // Pulisce tutto a prescindere
+    // 2. Rimuovi l'unico token che JavaScript può vedere
     Cookies.remove("auth_token");
+
+    // 3. Questa riga ora è inutile per il refresh_token (non ha effetto se è httpOnly),
+    // ma puoi lasciarla per pulire eventuali residui di vecchi test.
     Cookies.remove("refresh_token");
-    // window.location.href = "/login";
+
+    window.location.href = "/login";
   }
 };
