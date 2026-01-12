@@ -7,12 +7,7 @@ export const Route = createFileRoute("/(authenticated)/_checkAuth")({
     // Chiamiamo la Server Function
     const auth = await checkAuthStatus();
 
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-    console.log("auth", auth);
-
     if (!auth.isAuthenticated) {
-      console.log("REDIRECTING TO LOGIN");
       throw redirect({
         to: "/login",
         search: {

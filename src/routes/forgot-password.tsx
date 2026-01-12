@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 import {
   Card,
   CardContent,
@@ -9,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useForgotPassword } from "@/api/generated/auth/auth";
 
 export const Route = createFileRoute("/forgot-password")({
   component: ForgotPassword,
@@ -16,39 +18,29 @@ export const Route = createFileRoute("/forgot-password")({
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
+  const {
+    mutate: forgotPassword,
+    isPending,
+    isSuccess,
+  } = useForgotPassword({
+    mutation: {
+      onError: (error) => {
+        setError(error.message || "Errore nella chiamata API");
+      },
+    },
+  });
 
-    try {
-      // Chiamata alla tua API NestJS
-      const res = await fetch(`http://localhost:3001/auth/forgot-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (res.ok) {
-        setSent(true);
-      } else {
-        const data = await res.json();
-        setError(
-          data.message || "Errore durante l'invio dell'email di recupero"
-        );
-      }
-    } catch (err) {
-      setError("Errore di connessione. Riprova più tardi.");
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = (email: string) => {
+    forgotPassword({
+      data: {
+        email: email,
+      },
+    });
   };
 
-  if (sent) {
+  if (isSuccess) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-muted/30">
         <Card className="w-[400px]">
@@ -101,7 +93,13 @@ function ForgotPassword() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(email);
+            }}
+            className="space-y-4"
+          >
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
                 Email
@@ -113,7 +111,7 @@ function ForgotPassword() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                disabled={isLoading}
+                disabled={isPending}
                 aria-invalid={error ? "true" : "false"}
               />
             </div>
@@ -137,8 +135,8 @@ function ForgotPassword() {
               </div>
             )}
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? (
                 <span className="flex items-center gap-2">
                   <svg
                     className="h-4 w-4 animate-spin"

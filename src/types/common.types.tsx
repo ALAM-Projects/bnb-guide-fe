@@ -1,0 +1,20 @@
+export const colorTypeOptions = [
+  "white",
+  "brand",
+  "black",
+  "gray-1",
+  "gray-2",
+  "gray-3",
+  "gray-4",
+  "gray-5",
+  "gray-6",
+  "gray-7",
+  "gray-8",
+  "dark-gray",
+  "success",
+  "destructive",
+  "warning",
+  "orange",
+  "placeholder",
+] as const;
+export type ColorType = (typeof colorTypeOptions)[number];

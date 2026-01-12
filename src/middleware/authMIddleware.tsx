@@ -32,8 +32,6 @@ export const authMiddleware = createMiddleware({ type: "function" })
         ?.split("=")[1];
     }
 
-    console.log("SERVER MIDDLEWARE - Token:", !!token);
-
     return next({
       context: {
         auth: {

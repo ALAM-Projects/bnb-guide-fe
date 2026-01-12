@@ -14,6 +14,7 @@ import appCss from "@/styles/app.css?url";
 import { seo } from "@/utils/seo";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -64,6 +65,8 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 });
 
+const queryClient = new QueryClient();
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
@@ -102,33 +105,35 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {/* Navbar Semplice */}
-        <nav className="flex items-center justify-between p-4 border-b bg-white">
-          <Link to="/" className="text-xl font-bold text-primary">
-            BnB Guide
-          </Link>
-          <div className="flex gap-4">
-            {isAuthenticated ? (
-              <Button variant="outline" onClick={handleLogout}>
-                Logout
-              </Button>
-            ) : (
-              <>
-                <Link to="/login">
-                  <Button variant="ghost">Accedi</Button>
-                </Link>
-                <Link to="/signup">
-                  <Button>Registrati</Button>
-                </Link>
-              </>
-            )}
-          </div>
-        </nav>
+        <QueryClientProvider client={queryClient}>
+          {/* Navbar Semplice */}
+          <nav className="flex items-center justify-between p-4 border-b bg-white">
+            <Link to="/" className="text-xl font-bold text-primary">
+              BnB Guide
+            </Link>
+            <div className="flex gap-4">
+              {isAuthenticated ? (
+                <Button variant="outline" onClick={handleLogout}>
+                  Logout
+                </Button>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <Button variant="ghost">Accedi</Button>
+                  </Link>
+                  <Link to="/signup">
+                    <Button>Registrati</Button>
+                  </Link>
+                </>
+              )}
+            </div>
+          </nav>
 
-        <hr />
-        {children}
-        <TanStackRouterDevtools position="bottom-right" />
-        <Scripts />
+          <hr />
+          {children}
+          <TanStackRouterDevtools position="bottom-right" />
+          <Scripts />
+        </QueryClientProvider>
       </body>
     </html>
   );
