@@ -37,3 +37,13 @@ export const logoutAction = async () => {
     window.location.href = "/login";
   }
 };
+
+export const getLoggedUser = async () => {
+  try {
+    const { data } = await api.get("/user/getUser");
+    return data;
+  } catch (error) {
+    console.error("Errore getLoggedUser", error);
+    return null;
+  }
+};

@@ -15,6 +15,7 @@ import { seo } from "@/utils/seo";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Text from "@/components/base/text";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -113,9 +114,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </Link>
             <div className="flex gap-4">
               {isAuthenticated ? (
-                <Button variant="outline" onClick={handleLogout}>
-                  Logout
-                </Button>
+                <>
+                  <Link to="/dashboard">
+                    <Text>Dashboard</Text>
+                  </Link>
+                  <Link to="/guides">
+                    <Text>Guides</Text>
+                  </Link>
+                  <Button variant="outline" onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </>
               ) : (
                 <>
                   <Link to="/login">

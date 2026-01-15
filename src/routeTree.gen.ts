@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as authenticatedCheckAuthRouteImport } from './routes/(authenticated)/_checkAuth'
+import { Route as authenticatedCheckAuthGuidesRouteImport } from './routes/(authenticated)/_checkAuth.guides'
 import { Route as authenticatedCheckAuthDashboardRouteImport } from './routes/(authenticated)/_checkAuth.dashboard'
 
 const SignupRoute = SignupRouteImport.update({
@@ -46,6 +47,12 @@ const authenticatedCheckAuthRoute = authenticatedCheckAuthRouteImport.update({
   id: '/(authenticated)/_checkAuth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authenticatedCheckAuthGuidesRoute =
+  authenticatedCheckAuthGuidesRouteImport.update({
+    id: '/guides',
+    path: '/guides',
+    getParentRoute: () => authenticatedCheckAuthRoute,
+  } as any)
 const authenticatedCheckAuthDashboardRoute =
   authenticatedCheckAuthDashboardRouteImport.update({
     id: '/dashboard',
@@ -60,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof authenticatedCheckAuthDashboardRoute
+  '/guides': typeof authenticatedCheckAuthGuidesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,6 +76,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof authenticatedCheckAuthDashboardRoute
+  '/guides': typeof authenticatedCheckAuthGuidesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,6 +87,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/(authenticated)/_checkAuth': typeof authenticatedCheckAuthRouteWithChildren
   '/(authenticated)/_checkAuth/dashboard': typeof authenticatedCheckAuthDashboardRoute
+  '/(authenticated)/_checkAuth/guides': typeof authenticatedCheckAuthGuidesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/dashboard'
+    | '/guides'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/dashboard'
+    | '/guides'
   id:
     | '__root__'
     | '/'
@@ -105,6 +117,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/(authenticated)/_checkAuth'
     | '/(authenticated)/_checkAuth/dashboard'
+    | '/(authenticated)/_checkAuth/guides'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -160,6 +173,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedCheckAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(authenticated)/_checkAuth/guides': {
+      id: '/(authenticated)/_checkAuth/guides'
+      path: '/guides'
+      fullPath: '/guides'
+      preLoaderRoute: typeof authenticatedCheckAuthGuidesRouteImport
+      parentRoute: typeof authenticatedCheckAuthRoute
+    }
     '/(authenticated)/_checkAuth/dashboard': {
       id: '/(authenticated)/_checkAuth/dashboard'
       path: '/dashboard'
@@ -172,11 +192,13 @@ declare module '@tanstack/react-router' {
 
 interface authenticatedCheckAuthRouteChildren {
   authenticatedCheckAuthDashboardRoute: typeof authenticatedCheckAuthDashboardRoute
+  authenticatedCheckAuthGuidesRoute: typeof authenticatedCheckAuthGuidesRoute
 }
 
 const authenticatedCheckAuthRouteChildren: authenticatedCheckAuthRouteChildren =
   {
     authenticatedCheckAuthDashboardRoute: authenticatedCheckAuthDashboardRoute,
+    authenticatedCheckAuthGuidesRoute: authenticatedCheckAuthGuidesRoute,
   }
 
 const authenticatedCheckAuthRouteWithChildren =

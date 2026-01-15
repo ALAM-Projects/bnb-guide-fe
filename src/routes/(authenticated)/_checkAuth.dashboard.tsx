@@ -1,3 +1,4 @@
+import { getLoggedUser } from "@/api/auth";
 import api from "@/api/client";
 import Text from "@/components/base/text";
 import { createFileRoute } from "@tanstack/react-router";
@@ -5,9 +6,15 @@ import { useState } from "react";
 
 export const Route = createFileRoute("/(authenticated)/_checkAuth/dashboard")({
   component: Home,
+  beforeLoad: async () => {
+    const loggedUser = await getLoggedUser();
+
+    return { user: loggedUser };
+  },
 });
 
 function Home() {
+  const { user } = Route.useRouteContext();
   const [status, setStatus] = useState("");
   const [newName, setNewName] = useState("");
 
@@ -29,7 +36,7 @@ function Home() {
 
   return (
     <div className="flex flex-col gap-4 max-w-sm">
-      <Text size="h1">Bentornato </Text>
+      <Text size="h1">Bentornato {user?.name}</Text>
     </div>
   );
 }
