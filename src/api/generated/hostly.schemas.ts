@@ -17,3 +17,150 @@ export interface ResetPasswordDto { [key: string]: unknown }
 
 export interface UserDto { [key: string]: unknown }
 
+export type StructureDtoDescription = { [key: string]: unknown };
+
+export interface StructureDto {
+  id: string;
+  name: string;
+  address: string;
+  description?: StructureDtoDescription;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type RestaurantDtoAddress = { [key: string]: unknown };
+
+export type RestaurantDtoType = typeof RestaurantDtoType[keyof typeof RestaurantDtoType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RestaurantDtoType = {
+  PIZZA: 'PIZZA',
+  ITALIAN: 'ITALIAN',
+  SUSHI: 'SUSHI',
+  MEAT: 'MEAT',
+  FISH: 'FISH',
+} as const;
+
+export type RestaurantDtoDescription = { [key: string]: unknown };
+
+export interface RestaurantDto {
+  id: string;
+  name: string;
+  link: string;
+  address?: RestaurantDtoAddress;
+  type?: RestaurantDtoType;
+  description?: RestaurantDtoDescription;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ActivityDtoDescription = { [key: string]: unknown };
+
+export type ActivityDtoPrice = { [key: string]: unknown };
+
+export interface ActivityDto {
+  id: string;
+  name: string;
+  description?: ActivityDtoDescription;
+  price?: ActivityDtoPrice;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type SupermarketDtoAddress = { [key: string]: unknown };
+
+export type SupermarketDtoDescription = { [key: string]: unknown };
+
+export interface SupermarketDto {
+  id: string;
+  name: string;
+  address?: SupermarketDtoAddress;
+  description?: SupermarketDtoDescription;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface FaqDto {
+  id: string;
+  question: string;
+  answer: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RulesDto {
+  id: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type TransportationDtoType = typeof TransportationDtoType[keyof typeof TransportationDtoType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const TransportationDtoType = {
+  TRAIN: 'TRAIN',
+  BUS: 'BUS',
+  UNDERGROUND: 'UNDERGROUND',
+  TRAM: 'TRAM',
+} as const;
+
+export interface TransportationDto {
+  id: string;
+  type: TransportationDtoType;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type GuideDtoCheckInRules = { [key: string]: unknown };
+
+export type GuideDtoCheckOutRules = { [key: string]: unknown };
+
+export type GuideDtoWifiName = { [key: string]: unknown };
+
+export type GuideDtoWifiPassword = { [key: string]: unknown };
+
+export interface GuideDto {
+  id: string;
+  title: string;
+  structureId: string;
+  structure: StructureDto;
+  checkInRules?: GuideDtoCheckInRules;
+  checkOutRules?: GuideDtoCheckOutRules;
+  wifiName?: GuideDtoWifiName;
+  wifiPassword?: GuideDtoWifiPassword;
+  restaurants: RestaurantDto[];
+  activities: ActivityDto[];
+  supermarkets: SupermarketDto[];
+  faqs: FaqDto[];
+  rules: RulesDto[];
+  transportation: TransportationDto[];
+  userId: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type CreateStructureDtoDescription = { [key: string]: unknown };
+
+export interface CreateStructureDto {
+  name: string;
+  address: string;
+  description?: CreateStructureDtoDescription;
+}
+
+export type CreateGuideDataDtoDescription = { [key: string]: unknown };
+
+export interface CreateGuideDataDto {
+  title: string;
+  description?: CreateGuideDataDtoDescription;
+}
+
+export interface CreateGuideWithStructureDto {
+  structure: CreateStructureDto;
+  guide: CreateGuideDataDto;
+}
+

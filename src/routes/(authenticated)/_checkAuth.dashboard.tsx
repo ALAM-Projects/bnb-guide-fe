@@ -5,7 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/(authenticated)/_checkAuth/dashboard")({
-  component: Home,
+  component: DashboardPage,
   beforeLoad: async () => {
     const loggedUser = await getLoggedUser();
 
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/(authenticated)/_checkAuth/dashboard")({
   },
 });
 
-function Home() {
+function DashboardPage() {
   const { user } = Route.useRouteContext();
   const [status, setStatus] = useState("");
   const [newName, setNewName] = useState("");
