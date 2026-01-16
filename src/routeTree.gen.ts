@@ -19,6 +19,7 @@ import { Route as authenticatedCheckAuthGuidesRouteImport } from './routes/(auth
 import { Route as authenticatedCheckAuthDashboardRouteImport } from './routes/(authenticated)/_checkAuth.dashboard'
 import { Route as authenticatedCheckAuthGuidesIndexRouteImport } from './routes/(authenticated)/_checkAuth.guides.index'
 import { Route as authenticatedCheckAuthGuidesCreateRouteImport } from './routes/(authenticated)/_checkAuth.guides.create'
+import { Route as authenticatedCheckAuthGuidesGuideIdRouteImport } from './routes/(authenticated)/_checkAuth.guides.$guideId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -73,6 +74,12 @@ const authenticatedCheckAuthGuidesCreateRoute =
     path: '/create',
     getParentRoute: () => authenticatedCheckAuthGuidesRoute,
   } as any)
+const authenticatedCheckAuthGuidesGuideIdRoute =
+  authenticatedCheckAuthGuidesGuideIdRouteImport.update({
+    id: '/$guideId',
+    path: '/$guideId',
+    getParentRoute: () => authenticatedCheckAuthGuidesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/dashboard': typeof authenticatedCheckAuthDashboardRoute
   '/guides': typeof authenticatedCheckAuthGuidesRouteWithChildren
+  '/guides/$guideId': typeof authenticatedCheckAuthGuidesGuideIdRoute
   '/guides/create': typeof authenticatedCheckAuthGuidesCreateRoute
   '/guides/': typeof authenticatedCheckAuthGuidesIndexRoute
 }
@@ -92,6 +100,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof authenticatedCheckAuthDashboardRoute
+  '/guides/$guideId': typeof authenticatedCheckAuthGuidesGuideIdRoute
   '/guides/create': typeof authenticatedCheckAuthGuidesCreateRoute
   '/guides': typeof authenticatedCheckAuthGuidesIndexRoute
 }
@@ -105,6 +114,7 @@ export interface FileRoutesById {
   '/(authenticated)/_checkAuth': typeof authenticatedCheckAuthRouteWithChildren
   '/(authenticated)/_checkAuth/dashboard': typeof authenticatedCheckAuthDashboardRoute
   '/(authenticated)/_checkAuth/guides': typeof authenticatedCheckAuthGuidesRouteWithChildren
+  '/(authenticated)/_checkAuth/guides/$guideId': typeof authenticatedCheckAuthGuidesGuideIdRoute
   '/(authenticated)/_checkAuth/guides/create': typeof authenticatedCheckAuthGuidesCreateRoute
   '/(authenticated)/_checkAuth/guides/': typeof authenticatedCheckAuthGuidesIndexRoute
 }
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/guides'
+    | '/guides/$guideId'
     | '/guides/create'
     | '/guides/'
   fileRoutesByTo: FileRoutesByTo
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/dashboard'
+    | '/guides/$guideId'
     | '/guides/create'
     | '/guides'
   id:
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
     | '/(authenticated)/_checkAuth'
     | '/(authenticated)/_checkAuth/dashboard'
     | '/(authenticated)/_checkAuth/guides'
+    | '/(authenticated)/_checkAuth/guides/$guideId'
     | '/(authenticated)/_checkAuth/guides/create'
     | '/(authenticated)/_checkAuth/guides/'
   fileRoutesById: FileRoutesById
@@ -225,16 +238,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedCheckAuthGuidesCreateRouteImport
       parentRoute: typeof authenticatedCheckAuthGuidesRoute
     }
+    '/(authenticated)/_checkAuth/guides/$guideId': {
+      id: '/(authenticated)/_checkAuth/guides/$guideId'
+      path: '/$guideId'
+      fullPath: '/guides/$guideId'
+      preLoaderRoute: typeof authenticatedCheckAuthGuidesGuideIdRouteImport
+      parentRoute: typeof authenticatedCheckAuthGuidesRoute
+    }
   }
 }
 
 interface authenticatedCheckAuthGuidesRouteChildren {
+  authenticatedCheckAuthGuidesGuideIdRoute: typeof authenticatedCheckAuthGuidesGuideIdRoute
   authenticatedCheckAuthGuidesCreateRoute: typeof authenticatedCheckAuthGuidesCreateRoute
   authenticatedCheckAuthGuidesIndexRoute: typeof authenticatedCheckAuthGuidesIndexRoute
 }
 
 const authenticatedCheckAuthGuidesRouteChildren: authenticatedCheckAuthGuidesRouteChildren =
   {
+    authenticatedCheckAuthGuidesGuideIdRoute:
+      authenticatedCheckAuthGuidesGuideIdRoute,
     authenticatedCheckAuthGuidesCreateRoute:
       authenticatedCheckAuthGuidesCreateRoute,
     authenticatedCheckAuthGuidesIndexRoute:

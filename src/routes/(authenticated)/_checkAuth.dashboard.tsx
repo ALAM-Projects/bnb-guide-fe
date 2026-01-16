@@ -1,20 +1,16 @@
-import { getLoggedUser } from "@/api/auth";
 import api from "@/api/client";
 import Text from "@/components/base/text";
+import { getRouteApi } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/(authenticated)/_checkAuth/dashboard")({
   component: DashboardPage,
-  beforeLoad: async () => {
-    const loggedUser = await getLoggedUser();
-
-    return { user: loggedUser };
-  },
 });
 
 function DashboardPage() {
-  const { user } = Route.useRouteContext();
+  const parentRoute = getRouteApi("/(authenticated)/_checkAuth");
+  const { user } = parentRoute.useLoaderData();
   const [status, setStatus] = useState("");
   const [newName, setNewName] = useState("");
 

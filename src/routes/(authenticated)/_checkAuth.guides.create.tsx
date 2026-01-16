@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   Form,
   FormField,
@@ -11,7 +11,10 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useCreateGuide } from "@/api/generated/guide/guide";
-import { CreateGuideWithStructureDto } from "@/api/generated/hostly.schemas";
+import {
+  CreateGuideWithStructureDto,
+  GuideDto,
+} from "@/api/generated/hostly.schemas";
 
 export const Route = createFileRoute(
   "/(authenticated)/_checkAuth/guides/create"
@@ -21,6 +24,7 @@ export const Route = createFileRoute(
 
 function CreateGuidesPage() {
   const form = useForm();
+  const navigate = useNavigate();
 
   const { mutate: createGuide, isPending } = useCreateGuide();
 
@@ -32,8 +36,8 @@ function CreateGuidesPage() {
     createGuide(
       { data: newGuideData },
       {
-        onSuccess: () => {
-          window.alert("Guida creata con successo");
+        onSuccess: (newGuideData: GuideDto) => {
+          navigate({ to: `/guides/${newGuideData.id}` });
         },
         onError: () => {
           window.alert("Errore nella creazione della guida");
@@ -41,7 +45,6 @@ function CreateGuidesPage() {
       }
     );
   };
-  console.log("FORM => ", form.getValues());
 
   return (
     <main className="container mx-auto py-8">

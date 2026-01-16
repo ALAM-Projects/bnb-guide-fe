@@ -1,6 +1,6 @@
 // routes/(authenticated)/_checkAuth.tsx
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { checkAuthStatus } from "@/api/auth";
+import { checkAuthStatus, getLoggedUser } from "@/api/auth";
 
 export const Route = createFileRoute("/(authenticated)/_checkAuth")({
   beforeLoad: async ({ location }) => {
@@ -18,6 +18,11 @@ export const Route = createFileRoute("/(authenticated)/_checkAuth")({
 
     // Passiamo i dati auth al contesto della rotta per i figli
     return { auth };
+  },
+  loader: async () => {
+    const loggedUser = await getLoggedUser();
+
+    return { user: loggedUser };
   },
   component: () => <Outlet />,
 });

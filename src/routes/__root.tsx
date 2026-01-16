@@ -115,10 +115,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <div className="flex gap-4">
               {isAuthenticated ? (
                 <>
-                  <Link to="/dashboard">
+                  <Link to="/dashboard" preload={false}>
                     <Text>Dashboard</Text>
                   </Link>
-                  <Link to="/guides">
+                  <Link to="/guides" preload={false}>
                     <Text>Guides</Text>
                   </Link>
                   <Button variant="outline" onClick={handleLogout}>
