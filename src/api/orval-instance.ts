@@ -1,6 +1,30 @@
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import Cookies from "js-cookie";
 
+// Wrapper per AsyncLocalStorage che funziona sia lato server che client
+let ssrContext: {
+  getStore: () => { token?: string } | undefined;
+  run: <T>(store: { token?: string }, fn: () => T) => T;
+};
+
+if (typeof window === "undefined") {
+  // Lato server: usa AsyncLocalStorage
+  const { AsyncLocalStorage } = await import("node:async_hooks");
+  const storage = new AsyncLocalStorage<{ token?: string }>();
+  ssrContext = {
+    getStore: () => storage.getStore(),
+    run: <T>(store: { token?: string }, fn: () => T) => storage.run(store, fn),
+  };
+} else {
+  // Lato client: noop (non serve AsyncLocalStorage nel browser)
+  ssrContext = {
+    getStore: () => undefined,
+    run: <T>(_store: { token?: string }, fn: () => T) => fn(),
+  };
+}
+
+export { ssrContext };
+
 // Istanza base di Axios
 export const AXIOS_INSTANCE = axios.create({
   baseURL: "http://localhost:3001", // Assicurati che coincida con la porta del tuo NestJS
@@ -9,9 +33,17 @@ export const AXIOS_INSTANCE = axios.create({
 
 // Intercettore per aggiungere l'Access Token a ogni richiesta
 AXIOS_INSTANCE.interceptors.request.use((config: any) => {
-  const token = Cookies.get("auth_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // Durante SSR, prendi il token dal context
+  const ssrToken = ssrContext.getStore()?.token;
+  
+  if (ssrToken) {
+    config.headers.Authorization = `Bearer ${ssrToken}`;
+  } else {
+    // Lato client, usa js-cookie
+    const token = Cookies.get("auth_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });

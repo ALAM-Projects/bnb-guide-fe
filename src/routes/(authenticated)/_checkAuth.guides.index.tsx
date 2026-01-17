@@ -1,6 +1,6 @@
-import { getMyGuides } from "@/api/guide";
+import { getMyGuides } from "@/api/generated/guide/guide";
 import type { GuideDto } from "@/api/generated/hostly.schemas";
-import Text from "@/components/base/text";
+import { withSSRAuth } from "@/api/ssr-loader";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,10 +14,10 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Plus, MapPin, Calendar } from "lucide-react";
 
 export const Route = createFileRoute("/(authenticated)/_checkAuth/guides/")({
-  loader: async () => {
+  loader: withSSRAuth(async () => {
     const guides = await getMyGuides();
     return { guides: guides as any };
-  },
+  }),
   component: GuidesPage,
 });
 

@@ -1,6 +1,8 @@
 // routes/(authenticated)/_checkAuth.tsx
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { checkAuthStatus, getLoggedUser } from "@/api/auth";
+import { checkAuthStatus } from "@/api/auth";
+import { getUser } from "@/api/generated/user/user";
+import { withSSRAuth } from "@/api/ssr-loader";
 
 export const Route = createFileRoute("/(authenticated)/_checkAuth")({
   beforeLoad: async ({ location }) => {
@@ -17,15 +19,12 @@ export const Route = createFileRoute("/(authenticated)/_checkAuth")({
     }
 
     // Passiamo i dati auth al contesto della rotta per i figli
+    // Include il token per le chiamate SSR
     return { auth };
   },
-  loader: async ({ context}) => {
-    if (!context.auth.isAuthenticated) {
-      return { user: null };
-    }
-    const loggedUser = await getLoggedUser();
-
-    return { user: loggedUser };
-  },
+  loader: withSSRAuth(async () => {
+    const user = await getUser();
+    return { user } as any;
+  }),
   component: () => <Outlet />,
 });
