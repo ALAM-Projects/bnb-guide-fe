@@ -1,4 +1,4 @@
-import { getMyGuides } from "@/api/generated/guide/guide";
+import { getMyGuides } from "@/api/guide";
 import type { GuideDto } from "@/api/generated/hostly.schemas";
 import Text from "@/components/base/text";
 import { Button } from "@/components/ui/button";

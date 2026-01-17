@@ -19,7 +19,10 @@ export const Route = createFileRoute("/(authenticated)/_checkAuth")({
     // Passiamo i dati auth al contesto della rotta per i figli
     return { auth };
   },
-  loader: async () => {
+  loader: async ({ context}) => {
+    if (!context.auth.isAuthenticated) {
+      return { user: null };
+    }
     const loggedUser = await getLoggedUser();
 
     return { user: loggedUser };

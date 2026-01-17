@@ -15,7 +15,47 @@ export const checkAuthStatus = createServerFn({ method: "GET" })
   });
 
 /**
- * 2. LOGOUT FUNCTION (Azione Utente)
+ * 2. SERVER FUNCTION per ottenere l'utente loggato
+ * Funziona sia lato client che server (SSR)
+ */
+export const getLoggedUser = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    // Se non c'è autenticazione, ritorna null
+    if (!context?.auth?.isAuthenticated || !context?.auth?.token) {
+      return null;
+    }
+
+    try {
+      // Durante SSR, dobbiamo usare fetch con i cookie della richiesta
+      // Lato client, usiamo il normale client API
+      if (typeof window === "undefined") {
+        // Lato server: usa fetch con il token dal context
+        const response = await fetch("http://localhost:3001/user/getUser", {
+          headers: {
+            Authorization: `Bearer ${context.auth.token}`,
+          },
+        });
+
+        if (!response.ok) {
+          console.error("Errore getLoggedUser SSR", response.status);
+          return null;
+        }
+
+        return await response.json();
+      } else {
+        // Lato client: usa il client Axios con intercettori
+        const { data } = await api.get("/user/getUser");
+        return data;
+      }
+    } catch (error) {
+      console.error("Errore getLoggedUser", error);
+      return null;
+    }
+  });
+
+/**
+ * 3. LOGOUT FUNCTION (Azione Utente)
  * Coordina BE e FE
  */
 export const logoutAction = async () => {
@@ -35,15 +75,5 @@ export const logoutAction = async () => {
     Cookies.remove("refresh_token");
 
     window.location.href = "/login";
-  }
-};
-
-export const getLoggedUser = async () => {
-  try {
-    const { data } = await api.get("/user/getUser");
-    return data;
-  } catch (error) {
-    console.error("Errore getLoggedUser", error);
-    return null;
   }
 };

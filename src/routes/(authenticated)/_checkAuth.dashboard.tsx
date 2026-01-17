@@ -1,3 +1,4 @@
+import { getLoggedUser } from "@/api/auth";
 import api from "@/api/client";
 import Text from "@/components/base/text";
 import { getRouteApi } from "@tanstack/react-router";

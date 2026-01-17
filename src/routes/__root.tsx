@@ -71,15 +71,15 @@ const queryClient = new QueryClient();
 function RootDocument({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
-  // Funzione helper per leggere il cookie (solo lato client qui)
-  const getCookie = (name: string) => {
-    if (typeof document === "undefined") return null;
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(";").shift();
-  };
+  // Stato per gestire l'autenticazione solo lato client
+  // Inizia sempre come false durante SSR per evitare hydration mismatch
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
-  const isAuthenticated = !!getCookie("auth_token");
+  // Effetto che gira solo lato client dopo l'hydration
+  React.useEffect(() => {
+    const token = Cookies.get("auth_token");
+    setIsAuthenticated(!!token);
+  }, []);
 
   const handleLogout = async () => {
     const token = Cookies.get("auth_token");
