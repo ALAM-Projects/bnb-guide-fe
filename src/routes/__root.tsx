@@ -5,6 +5,7 @@ import {
   Scripts,
   createRootRoute,
   useNavigate,
+  useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import * as React from "react";
@@ -71,15 +72,14 @@ const queryClient = new QueryClient();
 function RootDocument({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
-  // Stato per gestire l'autenticazione solo lato client
-  // Inizia sempre come false durante SSR per evitare hydration mismatch
+  const location = useRouterState({ select: (s) => s.location.pathname });
+
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
-  // Effetto che gira solo lato client dopo l'hydration
   React.useEffect(() => {
     const token = Cookies.get("auth_token");
     setIsAuthenticated(!!token);
-  }, []);
+  }, [location]);
 
   const handleLogout = async () => {
     const token = Cookies.get("auth_token");
@@ -107,38 +107,50 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          {/* Navbar Semplice */}
-          <nav className="flex items-center justify-between p-4 border-b bg-white">
-            <Link to="/" className="text-xl font-bold text-primary">
-              BnB Guide
+          <nav className="sticky top-0 z-50 flex items-center justify-between px-6 h-14 bg-background/80 backdrop-blur-md border-b border-border/60">
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="h-6 w-6 rounded-md bg-foreground flex items-center justify-center">
+                <span className="text-background text-[11px] font-bold">H</span>
+              </div>
+              <span className="text-base font-semibold tracking-tight text-foreground">
+                Hostly
+              </span>
             </Link>
-            <div className="flex gap-4">
+
+            <div className="flex items-center gap-2">
               {isAuthenticated ? (
                 <>
-                  <Link to="/dashboard" preload={false}>
-                    <Text>Dashboard</Text>
+                  <Link
+                    to="/dashboard"
+                    preload={false}
+                    className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-md hover:bg-accent transition-colors"
+                  >
+                    Dashboard
                   </Link>
-                  <Link to="/guides" preload={false}>
-                    <Text>Guides</Text>
-                  </Link>
-                  <Button variant="outline" onClick={handleLogout}>
-                    Logout
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLogout}
+                    className="text-sm"
+                  >
+                    Esci
                   </Button>
                 </>
               ) : (
                 <>
                   <Link to="/login">
-                    <Button variant="ghost">Accedi</Button>
+                    <Button variant="ghost" size="sm">
+                      Accedi
+                    </Button>
                   </Link>
                   <Link to="/signup">
-                    <Button>Registrati</Button>
+                    <Button size="sm">Registrati</Button>
                   </Link>
                 </>
               )}
             </div>
           </nav>
 
-          <hr />
           {children}
           <TanStackRouterDevtools position="bottom-right" />
           <Scripts />

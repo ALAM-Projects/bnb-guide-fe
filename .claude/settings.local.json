@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(findstr \":3000\")",
+      "Read(//c/c/Users/aless/OneDrive/Desktop/Work/HOSTLY/bnb-guide-be/**)",
+      "Bash(xargs grep *)",
+      "Bash(curl -v -X OPTIONS http://localhost:3001/auth/login -H \"Origin: http://localhost:3000\" -H \"Access-Control-Request-Method: POST\" -H \"Access-Control-Request-Headers: content-type\")",
+      "Bash(tasklist /FI \"PID eq 22764\")",
+      "Bash(wmic process *)",
+      "Bash(tasklist /FI \"PID eq 22764\" /FO CSV)",
+      "Bash(powershell -Command \"Get-Process -Id 22764 | Select-Object Id,ProcessName,Path | Format-List\")"
+    ]
+  }
+}
