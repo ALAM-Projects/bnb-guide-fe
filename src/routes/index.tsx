@@ -26,6 +26,11 @@ import {
   Mountain,
   Check,
   ArrowRight,
+  Sparkles,
+  Star,
+  Zap,
+  Globe,
+  Shield,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -95,14 +100,43 @@ function RouteComponent() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="relative border-b border-border/60">
-        <div className="max-w-6xl mx-auto px-6 pt-24 pb-28 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-muted/50 px-3 py-1 text-xs font-medium text-muted-foreground mb-8">
-            <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
+      <section className="relative overflow-hidden border-b border-border/60">
+        {/* Background effects */}
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 10%, rgba(139, 92, 246, 0.18), transparent 45%), radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.14), transparent 50%), radial-gradient(circle at 50% 90%, rgba(124, 58, 237, 0.10), transparent 60%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.35]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+            maskImage:
+              "radial-gradient(ellipse 70% 60% at 50% 40%, black 40%, transparent 85%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 70% 60% at 50% 40%, black 40%, transparent 85%)",
+          }}
+        />
+        {/* Floating violet orbs */}
+        <div className="absolute top-20 left-1/4 h-64 w-64 rounded-full bg-violet-500/20 blur-3xl -z-10" />
+        <div className="absolute bottom-0 right-1/4 h-72 w-72 rounded-full bg-fuchsia-500/15 blur-3xl -z-10" />
+
+        <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-32 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-violet-200/80 bg-violet-50/80 backdrop-blur-sm px-3 py-1 text-xs font-medium text-violet-700 mb-8 shadow-sm">
+            <Sparkles className="h-3 w-3" />
             La soluzione per gestori di BnB
           </div>
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-foreground mb-6 max-w-4xl mx-auto">
-            Guide interattive per i tuoi ospiti
+            Guide interattive per i{" "}
+            <span className="relative inline-block">
+              <span className="relative z-10 bg-gradient-to-br from-violet-600 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
+                tuoi ospiti
+              </span>
+            </span>
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
             Hostly è la piattaforma che permette ai gestori di BnB di creare
@@ -111,7 +145,10 @@ function RouteComponent() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
             <Link to="/signup">
-              <Button size="lg" className="h-11 px-6 gap-2">
+              <Button
+                size="lg"
+                className="h-11 px-6 gap-2 bg-violet-600 hover:bg-violet-700 text-white shadow-[0_8px_30px_-8px_rgba(139,92,246,0.5)]"
+              >
                 Inizia gratis
                 <ArrowRight className="h-4 w-4" />
               </Button>
@@ -123,6 +160,50 @@ function RouteComponent() {
           <p className="mt-6 text-sm text-muted-foreground">
             Nessuna carta richiesta · Setup in 5 minuti
           </p>
+
+          {/* Trust row */}
+          <div className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <div className="flex -space-x-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-violet-500 text-violet-500" />
+                ))}
+              </div>
+              <span className="font-medium text-foreground">4.9/5</span>
+              <span>da oltre 200 host</span>
+            </div>
+            <div className="h-4 w-px bg-border hidden sm:block" />
+            <div className="flex items-center gap-1.5">
+              <Shield className="h-4 w-4 text-violet-600" />
+              <span>GDPR compliant</span>
+            </div>
+            <div className="h-4 w-px bg-border hidden sm:block" />
+            <div className="flex items-center gap-1.5">
+              <Zap className="h-4 w-4 text-violet-600" />
+              <span>Setup istantaneo</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats strip */}
+      <section className="border-b border-border/60 bg-background">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { v: "500+", l: "Host attivi" },
+              { v: "12k+", l: "Guide create" },
+              { v: "98%", l: "Soddisfazione ospiti" },
+              { v: "< 5 min", l: "Tempo di setup" },
+            ].map((s) => (
+              <div key={s.l} className="text-center md:text-left">
+                <div className="text-3xl sm:text-4xl font-semibold tracking-tight bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent tabular-nums">
+                  {s.v}
+                </div>
+                <div className="text-sm text-muted-foreground mt-1">{s.l}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -140,9 +221,12 @@ function RouteComponent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border/60 border border-border/60 rounded-xl overflow-hidden">
           {features.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="bg-background p-8 hover:bg-muted/40 transition-colors">
-              <div className="h-10 w-10 rounded-lg border border-border/80 bg-muted/50 flex items-center justify-center mb-5">
-                <Icon className="h-4.5 w-4.5 text-foreground" />
+            <div
+              key={title}
+              className="group relative bg-background p-8 hover:bg-violet-50/40 transition-colors"
+            >
+              <div className="h-10 w-10 rounded-lg border border-border/80 bg-muted/50 flex items-center justify-center mb-5 group-hover:border-violet-200 group-hover:bg-violet-100/50 transition-colors">
+                <Icon className="h-4.5 w-4.5 text-foreground group-hover:text-violet-600 transition-colors" />
               </div>
               <h3 className="font-semibold mb-2">{title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
@@ -249,30 +333,100 @@ function RouteComponent() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* Testimonials */}
       <section className="max-w-6xl mx-auto px-6 py-24">
-        <div className="rounded-2xl border border-border/60 bg-foreground text-background px-8 py-16 sm:px-16 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight mb-5">
-            Pronto a migliorare l'esperienza dei tuoi ospiti?
+        <div className="max-w-2xl mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full border border-violet-200/80 bg-violet-50 px-3 py-1 text-xs font-medium text-violet-700 mb-4">
+            <Globe className="h-3 w-3" />
+            Storie di host
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
+            Chi usa Hostly ne parla bene
           </h2>
-          <p className="text-lg text-background/70 mb-8 max-w-2xl mx-auto">
-            Unisciti agli host che hanno scelto Hostly per un'accoglienza più
-            professionale.
+          <p className="text-lg text-muted-foreground">
+            Host da tutta Italia ci raccontano come è cambiata l'accoglienza.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-            <Link to="/signup">
-              <Button size="lg" variant="secondary" className="h-11 px-6 gap-2">
-                Inizia gratis
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-11 px-6 bg-transparent border-background/20 text-background hover:bg-background/10 hover:text-background"
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              q: "Ho dimezzato le chiamate degli ospiti. Trovano tutto nella guida.",
+              n: "Marco V.",
+              r: "Host · Firenze",
+            },
+            {
+              q: "Setup veramente in 5 minuti. Design pulito, ospiti felici.",
+              n: "Giulia B.",
+              r: "Host · Roma",
+            },
+            {
+              q: "Il mio BnB sembra più professionale. Le recensioni sono migliorate.",
+              n: "Luca R.",
+              r: "Host · Milano",
+            },
+          ].map((t, i) => (
+            <Card
+              key={i}
+              className="relative border-border/60 shadow-none overflow-hidden"
             >
-              Vedi un esempio
-            </Button>
+              <div className="absolute top-0 left-0 h-0.5 w-full bg-linear-to-r from-violet-500 via-fuchsia-500 to-violet-400" />
+              <CardHeader>
+                <div className="flex gap-0.5 mb-3">
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} className="h-4 w-4 fill-violet-500 text-violet-500" />
+                  ))}
+                </div>
+                <p className="text-base text-foreground leading-relaxed mb-5">
+                  "{t.q}"
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-full bg-linear-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xs font-semibold">
+                    {t.n.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold">{t.n}</div>
+                    <div className="text-xs text-muted-foreground">{t.r}</div>
+                  </div>
+                </div>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="max-w-6xl mx-auto px-6 pb-24">
+        <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-foreground text-background px-8 py-16 sm:px-16 text-center">
+          {/* Violet glow */}
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-150 rounded-full bg-violet-500/40 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-40 right-0 h-64 w-64 rounded-full bg-fuchsia-500/30 blur-3xl pointer-events-none" />
+          <div className="relative">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight mb-5">
+              Pronto a migliorare l'esperienza dei tuoi ospiti?
+            </h2>
+            <p className="text-lg text-background/70 mb-8 max-w-2xl mx-auto">
+              Unisciti agli host che hanno scelto Hostly per un'accoglienza più
+              professionale.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <Link to="/signup">
+                <Button
+                  size="lg"
+                  className="h-11 px-6 gap-2 bg-violet-600 hover:bg-violet-500 text-white shadow-[0_8px_30px_-8px_rgba(139,92,246,0.8)]"
+                >
+                  Inizia gratis
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-11 px-6 bg-transparent border-background/20 text-background hover:bg-background/10 hover:text-background"
+              >
+                Vedi un esempio
+              </Button>
+            </div>
           </div>
         </div>
       </section>
